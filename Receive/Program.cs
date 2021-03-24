@@ -7,7 +7,7 @@ class Receive
 {
     private const string EXCHANGE = "eventos";
 
-    public static void Main()
+    public static void Main(string[] args)
     {
         var factory = new ConnectionFactory() { HostName = "localhost" };
         using (var connection = factory.CreateConnection())
@@ -15,11 +15,13 @@ class Receive
         {
             channel.ExchangeDeclare(EXCHANGE, ExchangeType.Fanout, durable: true);
 
-            var fila = channel.QueueDeclare();
+            string idFila = args.Length > 0 ? args[0] : "";
 
-            channel.QueueBind(fila.QueueName, EXCHANGE, routingKey: "");
+            var fila = channel.QueueDeclare(idFila, durable: true, exclusive: false, autoDelete: false);
 
-            Console.WriteLine(" [*] Aguardando mensagens.");
+            channel.QueueBind(idFila, EXCHANGE, routingKey: "");
+
+            Console.WriteLine($" [*] Aguardando mensagens na fila {idFila}.");
 
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) =>

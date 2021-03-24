@@ -13,6 +13,7 @@ class Send
         Console.WriteLine("Pressione [enter] para sair");
 
         bool sair = false;
+        int numEvento = 0;
         do
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
@@ -21,12 +22,13 @@ class Send
             {
                 channel.ExchangeDeclare(EXCHANGE, ExchangeType.Fanout, durable: true);
 
-                string message = "Hello World!";
+                numEvento++;
+                string message = $"{numEvento}: Hello World!";
                 var body = Encoding.UTF8.GetBytes(message);
                 var routingKey = GetRoutingKey();
 
                 channel.BasicPublish(EXCHANGE, routingKey, basicProperties: null, body: body);
-                Console.WriteLine(" [x] Enviado {0}", routingKey);
+                Console.WriteLine(" [x] Enviado {0} {1}", numEvento, routingKey);
             }
             Thread.Sleep(2000);
             sair = Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Enter;
@@ -36,7 +38,7 @@ class Send
     private static string GetRoutingKey()
     {
         string[] Keys = { "inclusao", "alteracao", "exclusao" };
-        var i = new Random().Next(Keys.Length - 1);
+        var i = new Random().Next(Keys.Length);
         return Keys[i];
     }
 }
