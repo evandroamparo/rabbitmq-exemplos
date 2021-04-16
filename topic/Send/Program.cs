@@ -33,10 +33,9 @@ class Send
             const string message = "Hello World!";
             var body = Encoding.UTF8.GetBytes(message);
 
-            string queue = routingKey.Split(".")[0];
-            channel.QueueDeclare(queue, durable: true, exclusive: false, autoDelete: false);
-            channel.QueueBind(queue, EXCHANGE, routingKey: $"{fila}.*");
-            System.Console.WriteLine($"Fila: {queue}");
+            channel.QueueDeclare(fila, durable: true, exclusive: false, autoDelete: false);
+            channel.QueueBind(fila, EXCHANGE, routingKey: $"{fila}.*");
+            System.Console.WriteLine($"Fila: {fila}");
 
             channel.BasicPublish(EXCHANGE,
                                  routingKey: routingKey,
