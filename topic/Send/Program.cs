@@ -30,8 +30,6 @@ class Send
 
             channel.ExchangeDeclare(EXCHANGE, ExchangeType.Topic, durable: true);
 
-            // CriarFilas(channel);
-
             const string message = "Hello World!";
             var body = Encoding.UTF8.GetBytes(message);
 
@@ -45,17 +43,6 @@ class Send
                                  basicProperties: null,
                                  body: body);
             Console.WriteLine(" [x] Sent '{0}':'{1}'", routingKey, message);
-        }
-    }
-
-    private static void CriarFilas(IModel channel)
-    {
-        for (int i = 1; i <= 10; i++)
-        {
-            var idFila = i.ToString();
-            Console.WriteLine($" Criando fila {idFila}");
-            var fila = channel.QueueDeclare(idFila, durable: true, exclusive: false, autoDelete: false);
-            channel.QueueBind(idFila, EXCHANGE, routingKey: $"{idFila}.*");
         }
     }
 
