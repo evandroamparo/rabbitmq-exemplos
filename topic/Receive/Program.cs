@@ -27,7 +27,7 @@ class Receive
 
 
             var queueName = args[0];
-            channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false);
+            channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: true);
 
             channel.QueueBind(queueName,
                               EXCHANGE,
