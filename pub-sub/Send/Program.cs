@@ -1,7 +1,6 @@
 ﻿using System;
 using RabbitMQ.Client;
 using System.Text;
-using System.Linq;
 using System.Threading;
 
 class Send
